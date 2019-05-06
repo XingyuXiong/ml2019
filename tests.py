@@ -20,25 +20,13 @@ def loadDataSet(fileName):
     return dataMat, labelMat
 
 
-def data_list_to_dict(dataMat,labelMat):
-    return_list=[]
-    for list in dataMat:
-        #print(list_to_dict(list))
-        dict={}
-        for i in range(len(list)):
-            dict[i]=list[i]
-        return_list.append(dict)
-    return return_list
-
-
 class test():
     dataMat,labelMat=loadDataSet(sys.path[0]+r'/iris/iris.data')
-    data_list=data_list_to_dict(dataMat,labelMat)
+    data_list=dataMat
 
     def test_kmeans(self):
         #print(sys.path[0])
-        k=1
+        k=3
         kmeans_exam=kmeans(k,self.data_list)
         kmeans_exam.init_center()
-        kmeans_exam.kmeans_iterate()
-        kmeans_exam.print()
+        kmeans_exam.iterate()
