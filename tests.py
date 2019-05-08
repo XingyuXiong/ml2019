@@ -1,5 +1,6 @@
 #
 from kmeans import kmeans
+from PCA import PCA
 from UCI_ML_Functions import *
 import os,sys
 
@@ -30,3 +31,7 @@ class test():
         kmeans_exam=kmeans(k,self.data_list)
         kmeans_exam.init_center()
         kmeans_exam.iterate()
+
+
+    def test_pca(self):
+        pca=PCA(self.data_list)
