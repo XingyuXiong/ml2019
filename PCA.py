@@ -1,7 +1,7 @@
 import numpy as np
 
-REMAIN_DIM=80
-REMAIN_RATE=0.99
+REMAIN_DIM=60
+REMAIN_RATE=0.9999
 ENABLE_RATE=False
 
 class PCA():
@@ -9,7 +9,7 @@ class PCA():
         self.raw_data=np.array(args)
         self.len=len(self.raw_data)
         self.data=self.centerize(self.raw_data)
-        print(self.data)
+        #print(self.data)
 
 
     def centerize(self,args):
@@ -19,36 +19,36 @@ class PCA():
         return center_data
 
 
-    def pca(self,X):
-        
+    def pca(self,X):      
         m=X.shape[0] 
-        self.cov=np.matmul(X,X.transpose())/(m-1)
-        for i in self.cov:
-            for j in i:
-                j=round(j,2)
-        print(self.cov)
-        self.lamda_v,self.lamda_a=np.linalg.eig(self.cov)
-        lamda={self.lamda_v[i]:self.lamda_a[i] for i in range(len(self.lamda_a))}
+        cov=np.matmul(X,X.transpose())/(m-1)
+        #对数位作出一些限制，否则会出现小数相减最后不归0的结果
+        for i in range(cov.shape[0]):
+            for j in range(cov.shape[1]):
+                cov[i][j]=round(cov[i][j],5)
+        #print(cov)
+        lamda_v,lamda_a=np.linalg.eig(cov)
+        lamda={lamda_v[i]:lamda_a[i] for i in range(len(lamda_a))}
         lamda=sorted(lamda.items(),key=lambda x:x[0],reverse=True)
-        print(self.lamda_v)
+        #print(self.lamda_v)
 
-        sum=np.sum(self.lamda_v)*REMAIN_RATE
+        sum=np.sum(lamda_v)*REMAIN_RATE
         remain_sum=0
-        self.pca_mat=[]
+        pca_mat=[]
         if ENABLE_RATE:
             for i in range(len(lamda)):
                 if(remain_sum<sum):
                     remain_sum+=lamda[i][0]
-                    self.pca_mat.append(lamda[i][1])
+                    pca_mat.append(lamda[i][1])
         else:
             for i in range(len(lamda)):
                 if i<REMAIN_DIM:
-                    self.pca_mat.append(lamda[i][1])
-        self.pca_mat=np.array(self.pca_mat)
-        print(self.pca_mat)
+                    pca_mat.append(lamda[i][1])
+        pca_mat=np.array(pca_mat)
+        #print(self.pca_mat)
         #print(np.matmul(self.pca_mat.transpose(),self.pca_mat).shape)
         #print(self.cov)
-        return self.pca_mat
+        return pca_mat
 
 
     def ret(self):
