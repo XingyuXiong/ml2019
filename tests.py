@@ -3,6 +3,15 @@ from kmeans import kmeans
 from PCA import PCA
 from UCI_ML_Functions import *
 import os,sys
+import numpy as np
+from scipy.io import wavfile
+import matplotlib.pylab as plt
+from PIL import Image
+
+
+FACE_INEDX=0
+work_path=sys.path[0]
+
 
 def loadDataSet(fileName):      
     numFeat = len(open(fileName).readline().split(','))    # 计算有多少列
@@ -21,12 +30,29 @@ def loadDataSet(fileName):
     return dataMat, labelMat
 
 
+def loadFace():
+    pgm_files=[]
+    path=work_path+r'/yaleB01'
+    files=os.listdir(path)
+    
+    try:
+        for f in files:
+            fl=os.path.join(path,f)
+            if os.path.isfile(fl) and os.path.splitext(fl)[1]=='.pgm':
+                #print(fl)
+                pgm_files.append(fl)
+    except Exception:
+        print('file search fail')
+    pgm_ims=[np.array(Image.open(file)) for file in pgm_files]
+    return pgm_ims
+
+
+
 class test():
-    dataMat,labelMat=loadDataSet(sys.path[0]+r'/iris/iris.data')
+    dataMat,labelMat=loadDataSet(work_path+r'/iris/iris.data')
     data_list=dataMat
 
     def test_kmeans(self):
-        #print(sys.path[0])
         k=3
         kmeans_exam=kmeans(k,self.data_list)
         kmeans_exam.init_center()
@@ -34,4 +60,18 @@ class test():
 
 
     def test_pca(self):
-        pca=PCA(self.data_list)
+        images=loadFace()
+        images=[images[FACE_INEDX][:10,:5]]    
+        pca=PCA(images)
+        pca_ims=pca.ret()
+        #print(pca_ims)
+
+        before_pca=Image.fromarray(images[FACE_INEDX])
+        #print(pca_ims[FACE_INEDX])
+        after_pca=Image.fromarray(pca_ims[FACE_INEDX])
+        fig=plt.figure('pca')
+        ax=fig.add_subplot(221)
+        ax.imshow(before_pca)
+        ax=fig.add_subplot(222)
+        ax.imshow(after_pca)
+        plt.show()
