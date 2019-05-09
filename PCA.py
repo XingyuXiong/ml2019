@@ -1,7 +1,7 @@
 import numpy as np
 
-REMAIN_DIM=60
-REMAIN_RATE=0.9999
+REMAIN_DIM=5
+REMAIN_RATE=0.999999
 ENABLE_RATE=False
 
 class PCA():
@@ -9,7 +9,7 @@ class PCA():
         self.raw_data=np.array(args)
         self.len=len(self.raw_data)
         self.data=self.centerize(self.raw_data)
-        #print(self.data)
+        #print(self.raw_data)
 
 
     def centerize(self,args):
@@ -25,11 +25,12 @@ class PCA():
         #对数位作出一些限制，否则会出现小数相减最后不归0的结果
         for i in range(cov.shape[0]):
             for j in range(cov.shape[1]):
-                cov[i][j]=round(cov[i][j],5)
+                cov[i][j]=round(cov[i][j],8)
         #print(cov)
         lamda_v,lamda_a=np.linalg.eig(cov)
-        lamda={lamda_v[i]:lamda_a[i] for i in range(len(lamda_a))}
+        lamda={lamda_v[i]:lamda_a[:,i] for i in range(len(lamda_a))}
         lamda=sorted(lamda.items(),key=lambda x:x[0],reverse=True)
+        pca_mat2=np.array([tuple[1] for tuple in lamda])
         #print(self.lamda_v)
 
         sum=np.sum(lamda_v)*REMAIN_RATE
@@ -45,9 +46,6 @@ class PCA():
                 if i<REMAIN_DIM:
                     pca_mat.append(lamda[i][1])
         pca_mat=np.array(pca_mat)
-        #print(self.pca_mat)
-        #print(np.matmul(self.pca_mat.transpose(),self.pca_mat).shape)
-        #print(self.cov)
         return pca_mat
 
 
@@ -57,8 +55,9 @@ class PCA():
             tran_mat=self.pca(self.data[i])
             tran_mat=np.matmul(tran_mat.transpose(),tran_mat)
             rev_pca_data=np.matmul(tran_mat,self.data[i])
-            print(rev_pca_data.shape)
+            #print(rev_pca_data.shape)
             self.return_data[i]=rev_pca_data+self.raw_data[i]-self.data[i]
+        #print(self.return_data)
         return self.return_data
 
 

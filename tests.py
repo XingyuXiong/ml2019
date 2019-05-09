@@ -9,7 +9,7 @@ import matplotlib.pylab as plt
 from PIL import Image
 
 
-START_INDEX=0
+START_INDEX=2
 END_INDEX=3
 work_path=sys.path[0]
 
@@ -63,8 +63,10 @@ class test():
     def test_pca(self):
         pic_num=END_INDEX-START_INDEX
         images=loadFace()
-        print(images[1])
-        #images=[images[i][:,:]]    
+        
+        for i in range(len(images)):
+            images[i]=images[i][:,:]
+        
         pca=PCA(images[START_INDEX:END_INDEX])
         pca_ims=pca.ret()
         for i in range(START_INDEX,END_INDEX):
@@ -73,8 +75,8 @@ class test():
             #print(pca_ims[FACE_INEDX])
             after_pca=Image.fromarray(pca_ims[i-START_INDEX])
             fig=plt.figure('pca')
-            ax=fig.add_subplot(pic_num,2,i+1-START_INDEX)
-            ax.imshow(before_pca)
-            ax=fig.add_subplot(pic_num,2,i+2-START_INDEX)
-            ax.imshow(after_pca)
+            ax=fig.add_subplot(pic_num,2,i*2+1-START_INDEX*2)
+            ax.imshow(before_pca,cmap='gray',vmin=0,vmax=255)
+            ax=fig.add_subplot(pic_num,2,i*2+2-START_INDEX*2)
+            ax.imshow(after_pca,cmap='gray',vmin=0,vmax=255)
         plt.show()
