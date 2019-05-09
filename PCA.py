@@ -1,6 +1,7 @@
 import numpy as np
 
-REMAIN_DIM=5
+
+REMAIN_DIM=6
 REMAIN_RATE=0.999999
 ENABLE_RATE=False
 

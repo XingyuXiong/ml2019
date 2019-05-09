@@ -1,16 +1,16 @@
 #
 from kmeans import kmeans
 from PCA import PCA
+#from SVM import SVM
 from UCI_ML_Functions import *
 import os,sys
 import numpy as np
-from scipy.io import wavfile
 import matplotlib.pylab as plt
 from PIL import Image
 
 
-START_INDEX=2
-END_INDEX=3
+START_INDEX=0
+END_INDEX=2
 work_path=sys.path[0]
 
 
@@ -35,12 +35,10 @@ def loadFace():
     pgm_files=[]
     path=work_path+r'/yaleB01'
     files=os.listdir(path)
-    
     try:
         for f in files:
             fl=os.path.join(path,f)
             if os.path.isfile(fl) and os.path.splitext(fl)[1]=='.pgm':
-                #print(fl)
                 pgm_files.append(fl)
     except Exception:
         print('file search fail')
@@ -74,6 +72,26 @@ class test():
             before_pca=Image.fromarray(images[i])
             #print(pca_ims[FACE_INEDX])
             after_pca=Image.fromarray(pca_ims[i-START_INDEX])
+            fig=plt.figure('pca')
+            ax=fig.add_subplot(pic_num,2,i*2+1-START_INDEX*2)
+            ax.imshow(before_pca,cmap='gray',vmin=0,vmax=255)
+            ax=fig.add_subplot(pic_num,2,i*2+2-START_INDEX*2)
+            ax.imshow(after_pca,cmap='gray',vmin=0,vmax=255)
+        plt.show()
+
+
+    def test_pca2(self):
+        pic_num=END_INDEX-START_INDEX
+        images=loadFace()
+        print(images)
+        m,n=images[0].shape
+        images_in=images.copy()
+        #针对不同图片的降维，这会使图片趋同
+        pca=PCA(np.array([[image.reshape(-1) for image in images_in]]))
+        pca_ims=pca.ret()
+        for i in range(START_INDEX,END_INDEX):
+            before_pca=Image.fromarray(images[i])
+            after_pca=Image.fromarray(pca_ims[0][i].reshape(m,n))
             fig=plt.figure('pca')
             ax=fig.add_subplot(pic_num,2,i*2+1-START_INDEX*2)
             ax.imshow(before_pca,cmap='gray',vmin=0,vmax=255)
