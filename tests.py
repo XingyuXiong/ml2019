@@ -100,4 +100,6 @@ class test():
 
 
     def test_svm(self):
-        svm=SVM(self.dataMat,self.labelMat)
+        kernel_class=['linear','rbf','poly','sigmoid']
+        choose_kernel=2
+        svm=SVM(self.dataMat,self.labelMat,kernel_class[choose_kernel])
