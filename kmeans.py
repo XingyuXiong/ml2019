@@ -1,11 +1,10 @@
 #
-import math
 from random import uniform
 import matplotlib.pyplot as plt
 import numpy as np
 DIM_X=0
 DIM_Y=1
-MAX_ITER_DEPTH=3
+MAX_ITER_DEPTH=7
 ITER_LIMIT=False
 DRAW=False
 
@@ -31,7 +30,7 @@ class kmeans():
     
         self.colors=np.array([[i//4%2,i//2%2,i%2] for i in range(1,self.knum+1)])#rgb三色组
         self.iter_depth=0#当前函数执行次数（递归深度）
-        self.fig, self.axs = plt.subplots(MAX_ITER_DEPTH+1,2, figsize=(10, 10))
+        self.fig, self.axs = plt.subplots(MAX_ITER_DEPTH+1,1, figsize=(10, 10))
 
     def init_center(self):
         '''
@@ -106,8 +105,8 @@ class kmeans():
         x=self.data[:,selectx]
         y=self.data[:,selecty]#显然，对于iris的四维数据空间，只能选取其中两项或三项来展示，这也导致聚类中心“看起来”不一定在中间
         c=[self.colors[i] for i in self.data_class]
-        axs[pic_n,0].scatter(x=x,y=y,c=c,s=10)
-        axs[pic_n,0].scatter(x=self.center_list[:,selectx],y=self.center_list[:,selecty],c=self.colors,marker='o',s=50,edgecolors='k')
+        axs[pic_n].scatter(x=x,y=y,c=c,s=10)
+        axs[pic_n].scatter(x=self.center_list[:,selectx],y=self.center_list[:,selecty],c=self.colors,marker='o',s=50,edgecolors='k')
         #以下两项可以除去，仅适用于当前数据集（iris）
-        axs[pic_n,1].scatter(x=self.data[:,2],y=self.data[:,3],c=c,s=10)
-        axs[pic_n,1].scatter(x=self.center_list[:,2],y=self.center_list[:,3],c=self.colors,marker='o',s=50,edgecolors='k')
+        #axs[pic_n,1].scatter(x=self.data[:,2],y=self.data[:,3],c=c,s=10)
+        #xs[pic_n,1].scatter(x=self.center_list[:,2],y=self.center_list[:,3],c=self.colors,marker='o',s=50,edgecolors='k')

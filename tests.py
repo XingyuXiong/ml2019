@@ -2,7 +2,6 @@
 from kmeans import kmeans
 from PCA import PCA
 from SVM import SVM
-from UCI_ML_Functions import *
 import os,sys
 import numpy as np
 import matplotlib.pylab as plt
@@ -50,6 +49,7 @@ def loadFace():
 class test():
     dataMat,labelMat=loadDataSet(work_path+r'/iris/iris.data')
 
+
     def test_kmeans(self):
         k=3
         kmeans_exam=kmeans(k,self.dataMat)
@@ -66,10 +66,8 @@ class test():
         
         pca=PCA(images[START_INDEX:END_INDEX])
         pca_ims=pca.ret()
-        for i in range(START_INDEX,END_INDEX):
-            #print(pca_ims)  
+        for i in range(START_INDEX,END_INDEX): 
             before_pca=Image.fromarray(images[i])
-            #print(pca_ims[FACE_INEDX])
             after_pca=Image.fromarray(pca_ims[i-START_INDEX])
             fig=plt.figure('pca')
             ax=fig.add_subplot(pic_num,2,i*2+1-START_INDEX*2)
