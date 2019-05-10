@@ -1,7 +1,7 @@
 #
 from kmeans import kmeans
 from PCA import PCA
-#from SVM import SVM
+from SVM import SVM
 from UCI_ML_Functions import *
 import os,sys
 import numpy as np
@@ -49,11 +49,10 @@ def loadFace():
 
 class test():
     dataMat,labelMat=loadDataSet(work_path+r'/iris/iris.data')
-    data_list=dataMat
 
     def test_kmeans(self):
         k=3
-        kmeans_exam=kmeans(k,self.data_list)
+        kmeans_exam=kmeans(k,self.dataMat)
         kmeans_exam.init_center()
         kmeans_exam.iterate()
 
@@ -98,3 +97,7 @@ class test():
             ax=fig.add_subplot(pic_num,2,i*2+2-START_INDEX*2)
             ax.imshow(after_pca,cmap='gray',vmin=0,vmax=255)
         plt.show()
+
+
+    def test_svm(self):
+        svm=SVM(self.dataMat,self.labelMat)
